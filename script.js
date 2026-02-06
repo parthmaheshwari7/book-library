@@ -4,10 +4,9 @@
 // adding thumbnail image from google books api (DONE)
 // adding thumbnail image link to localStorage so that API isn't called unnecessarily (DONE)
 // creating a buffer icon while it is finding and displaying the thumbnail (DONE)
-// all components are updated showcasing number of books logged, common reasons, etc
+// all components are dynamically updated showcasing number of books logged, common reasons, etc (DONE)
 // adding delete card option
 // prevent from adding duplicate
-// adding search functionaility
 // adding filter functionality
 // adding light/dark mode (optional)
 
