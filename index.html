@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,26 +27,38 @@
         <div class="left-pane">
             <div class="label"><i class="fa-solid fa-list-ul"></i>&nbsp&nbspOVERVIEW</div>
             <div id="totalDNF">
-                <span class="label">Total DNFs</span>
-                <progress value="32" max="100" style="accent-color: #B22222;">32%</progress>
+                    <span class="label" style="font-size: 15px;">Total DNFs</span>
+                    <span class="label" id="total-books" style="font-size: 18px;color: #B22222; font-weight: 700;">0</span>   
             </div>
             <div class="label" style="padding-top: 10px;"><i class="fa-solid fa-chart-simple"></i>&nbsp&nbspCOMMON
                 REASONS</div>
             <div id="reason">
-                <span class="label">Slow pacing</span>
-                <progress value="32" max="100" style="accent-color: red;">32%</progress>
+                <div id="flex-row">
+                    <span class="label">Slow pacing</span>
+                    <span class="label" id="total-slow-pacing">0 (0%)</span>
+                </div>
+                <progress id="progress-slow-pacing" value="0" max="100" style="accent-color: red;"></progress>
             </div>
             <div id="reason">
-                <span class="label">Writing style</span>
-                <progress value="42" max="100" style="accent-color: blue">32%</progress>
+                <div id="flex-row">
+                    <span class="label">Writing style</span>
+                    <span class="label" id="total-writing-style">0 (0%)</span>
+                </div>
+                <progress id="progress-writing-style" value="0" max="100" style="accent-color: blue"></progress>
             </div>
             <div id="reason">
-                <span class="label">Boring plot</span>
-                <progress value="12" max="100" style="accent-color: teal">32%</progress>
+                <div id="flex-row">
+                    <span class="label">Boring plot</span>
+                    <span class="label" id="total-boring-plot">0 (0%)</span>
+                </div>
+                <progress id="progress-boring-plot" value="0" max="100" style="accent-color: teal"></progress>
             </div>
             <div id="reason">
-                <span class="label">Too long</span>
-                <progress value="22" max="100" style="accent-color: purple">32%</progress>
+                <div id="flex-row">
+                    <span class="label">Too long</span>
+                    <span class="label" id="total-too-long">0 (0%)</span>
+                </div>
+                <progress id="progress-too-long" value="0" max="100" style="accent-color: purple"></progress>
             </div>
             <div class="label" style="padding-top: 10px;"><i class="fa-solid fa-circle-plus"></i>&nbsp&nbspADD NEW BOOK
             </div>
@@ -66,12 +79,12 @@
                     <span class="label">TOTAL PAGES</span>
                     <input type="number" id="total-pages" min="1"></input>
                 </div>
-                
+
             </div>
             <div class="add-new-dnf">
                 <span class="label">REASON</span>
                 <select id="reasons-dropdown">
-                    <option>Slow Pacing</option>
+                    <option>Slow pacing</option>
                     <option>Writing style</option>
                     <option>Boring plot</option>
                     <option>Too long</option>
@@ -92,7 +105,7 @@
                     <div class="filter">
                         <span class="label">FILTER BY&nbsp&nbsp
                             <select id="filter-dropdown">
-                                <option>Slow Pacing</option>
+                                <option>Slow pacing</option>
                                 <option>Writing style</option>
                                 <option>Boring plot</option>
                                 <option>Too long</option>

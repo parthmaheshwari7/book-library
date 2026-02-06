@@ -6,6 +6,7 @@
 // creating a buffer icon while it is finding and displaying the thumbnail (DONE)
 // all components are updated showcasing number of books logged, common reasons, etc
 // adding delete card option
+// prevent from adding duplicate
 // adding search functionaility
 // adding filter functionality
 // adding light/dark mode (optional)
@@ -73,6 +74,7 @@ function init(library) {
   for (i = 0; i < library.length; i++) {
     createCard(library[i].title, library[i].author, library[i].totalPages, library[i].pagesRead, library[i].reason, library[i].imageURL);
   }
+  countLoggedBooks();
   title.value = 'The Alchemist'
   author.value = 'Paulo Coelho'
   totalPages.value = '200';
@@ -92,6 +94,39 @@ async function addBook() {
     const book = new Book(title.value, author.value, totalPages.value, pagesRead.value, reason.value, imageURL, uid);
   }
 
+}
+
+function countLoggedBooks(){
+  // creating array of reasons logged
+  reasonArray = myLibrary.map(item => item.reason);
+  console.log("reasonArray: ", reasonArray);
+  
+  if(reasonArray.length > 0){
+    const groupByReason = {"Slow pacing": 0, "Writing style": 0, "Boring plot": 0, "Too long": 0}; // initializing empty object
+  // going through each reason
+  for(const reason of reasonArray){
+    if(groupByReason[reason]){
+      groupByReason[reason]++; // incrementing count if reason already exists in groupByReason object
+    }
+    else{
+      groupByReason[reason] = 1; // changing count to 1 if reason not found in groupByReason object
+    }
+  }
+  console.log("groupByReason: ", groupByReason);
+  document.getElementById('total-books').textContent = myLibrary.length;
+  document.getElementById('total-slow-pacing').textContent = groupByReason["Slow pacing"] + " (" + Math.round((groupByReason["Slow pacing"]/myLibrary.length)*100) + "%)";
+  document.getElementById('progress-slow-pacing').value = Math.round((groupByReason["Slow pacing"]/myLibrary.length)*100);
+  document.getElementById('total-writing-style').textContent = groupByReason["Writing style"] + " (" + Math.round((groupByReason["Writing style"]/myLibrary.length)*100) + "%)";
+  // console.log("progress-writing-style: ", groupByReason["Writing style"], myLibrary.length);
+  document.getElementById('progress-writing-style').value = Math.round((groupByReason["Writing style"]/myLibrary.length)*100);
+  document.getElementById('total-boring-plot').textContent = groupByReason["Boring plot"] + " (" + Math.round((groupByReason["Boring plot"]/myLibrary.length)*100) + "%)";
+  document.getElementById('progress-boring-plot').value = Math.round((groupByReason["Boring plot"]/myLibrary.length)*100);
+  document.getElementById('total-too-long').textContent = groupByReason["Too long"] + " (" + Math.round((groupByReason["Too long"]/myLibrary.length)*100) + "%)";
+  document.getElementById('progress-too-long').value = Math.round((groupByReason["Too long"]/myLibrary.length)*100);
+  }
+  else{
+    //
+  }
 }
 
 async function imageURLExtraction(title, author) {
@@ -141,21 +176,6 @@ async function imageURLExtraction(title, author) {
   //   .catch(error => console.error('Error fetching data:', error));
 }
 
-// async function fetchAndDisplayImage(imageURL, imgElementId) {
-//   try {
-//     // Don't `fetch` cross-origin image resources — that triggers CORS.
-//     // Instead set the image element's `src` directly to the remote URL.
-//     const imgElement = document.getElementById(imgElementId);
-//     if (imgElement) {
-//       imgElement.src = imageURL;
-//     } else {
-//       console.error(`Image element with id "${imgElementId}" not found.`);
-//     }
-//   } catch (error) {
-//     console.error("Error setting image src:", error);
-//   }
-// }
-
 function Book(title, author, totalPages, pagesRead, reason, imageURL, uid) {
   // the constructor
   this.title = title;
@@ -179,6 +199,7 @@ function Book(title, author, totalPages, pagesRead, reason, imageURL, uid) {
   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
   console.log("myLibrary: ", myLibrary);
   createCard(title, author, Number(totalPages), Number(pagesRead), reason, imageURL);
+  countLoggedBooks();
   // clear();
 }
 
@@ -187,7 +208,7 @@ function clear() {
   author.value = "";
   totalPages.value = "";
   pagesRead.value = "";
-  reason.value = "Slow Pacing";
+  reason.value = "Slow pacing";
 }
 
 function createCard(title, author, totalPages, pagesRead, reason, imageURL) {
@@ -242,6 +263,6 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL) {
   card.appendChild(dnfReason);
 
   booksGrid.appendChild(card);
-
+  
   showPopup(false);
 }

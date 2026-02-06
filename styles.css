@@ -2,12 +2,9 @@
     width: 40px;
     height: 40px;
     border: 4px solid rgba(178, 34, 34, 0.2);
-    /* Faint red circle */
     border-top: 4px solid #B22222;
-    /* Solid red "moving" part */
     border-radius: 50%;
     margin: 0 auto;
-    /* animation: spin 1s linear infinite; */
 }
 
 body {
@@ -66,8 +63,7 @@ button.github:hover {
 }
 
 #reason,
-.add-new-dnf,
-#totalDNF {
+.add-new-dnf {
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -98,13 +94,22 @@ button.github:hover {
 }
 
 #totalDNF {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border: 2px solid #E5E5E5;
     border-radius: 6px;
     padding: 10px;
 }
 
+#reason>#flex-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 progress {
-    width: 80%;
+    width: 100%;
 }
 
 input[type='text'],
