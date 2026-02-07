@@ -34,7 +34,7 @@ button.github {
 }
 
 button.dark-light:hover,
-button.github:hover {
+button.github:hover, button.remove:hover {
     transform: scale(1.2);
 }
 
@@ -48,7 +48,7 @@ button.github:hover {
 .left-pane {
     display: flex;
     flex-direction: column;
-    flex: 1 1 20%;
+    flex: 1 1 18%;
     gap: 11px;
     padding: 15px;
     background-color: #F9F9F9;
@@ -59,7 +59,7 @@ button.github:hover {
 .library {
     display: flex;
     flex-direction: column;
-    flex: 1 1 75%;
+    flex: 1 1 80%;
 }
 
 #reason,
@@ -145,6 +145,16 @@ button#add {
     border-radius: 6px;
 }
 
+button.remove{
+    border: none;
+    background-color: white;
+    color: #E5E5E5;
+}
+
+button.remove:hover{
+    color:#B22222;
+}
+
 button#add:hover {
     transform: scale(1.02);
 }
@@ -213,7 +223,7 @@ hr {
     /* border-left: 8px solid #f0b429; */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     /* height: fit-content; */
-    padding: 20px;
+    padding: 20px 5px 20px 15px;
     gap: 15px;
     /* height: 200px; */
     /* width: 100px; */

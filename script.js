@@ -8,6 +8,8 @@
 // adding delete card option
 // prevent from adding duplicate
 // adding filter functionality
+// adding progress bar below each card (stuck to card) to elevate UI
+// error handling
 // adding light/dark mode (optional)
 
 const showPopup = (status) => {
@@ -71,7 +73,7 @@ init(myLibrary);
 function init(library) {
   console.log("library: ", library);
   for (i = 0; i < library.length; i++) {
-    createCard(library[i].title, library[i].author, library[i].totalPages, library[i].pagesRead, library[i].reason, library[i].imageURL);
+    createCard(library[i].title, library[i].author, library[i].totalPages, library[i].pagesRead, library[i].reason, library[i].imageURL, library[i].uid);
   }
   countLoggedBooks();
   title.value = 'The Alchemist'
@@ -197,7 +199,7 @@ function Book(title, author, totalPages, pagesRead, reason, imageURL, uid) {
   );
   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
   console.log("myLibrary: ", myLibrary);
-  createCard(title, author, Number(totalPages), Number(pagesRead), reason, imageURL);
+  createCard(title, author, Number(totalPages), Number(pagesRead), reason, imageURL, uid);
   countLoggedBooks();
   // clear();
 }
@@ -210,9 +212,10 @@ function clear() {
   reason.value = "Slow pacing";
 }
 
-function createCard(title, author, totalPages, pagesRead, reason, imageURL) {
+function createCard(title, author, totalPages, pagesRead, reason, imageURL, uid) {
   const booksGrid = document.getElementById('books-grid');
   const card = document.createElement('div');
+  card.id = `card-${uid}`;
   card.className = 'card';
 
   const img = document.createElement('img');
@@ -226,11 +229,11 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL) {
   img.alt = 'Book Cover';
   img.style.width = '100px';
   img.style.aspectRatio = '3/4';
-  img.style.flex = '1 1 20%';
+  // img.style.flex = '1 1 20%';
 
   const bookSummary = document.createElement('div');
   bookSummary.className = 'book-summary';
-  bookSummary.style.flex = '1 1 40%';
+  bookSummary.style.flex = '1 1 50%';
 
   const bookDetails = document.createElement('div');
   bookDetails.className = 'book-details';
@@ -257,11 +260,37 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL) {
   dnfReason.textContent = reason;
   dnfReason.style.flex = '0 0 auto';
 
+  const removeBtn = document.createElement('button');
+  removeBtn.id = `delete-${uid}`;
+  removeBtn.className = 'remove';
+  const deleteIcon = document.createElement('i');
+  deleteIcon.className = 'fa solid fa-trash';
+  removeBtn.appendChild(deleteIcon);
+
   card.appendChild(img);
   card.appendChild(bookSummary);
   card.appendChild(dnfReason);
+  card.appendChild(removeBtn);
 
   booksGrid.appendChild(card);
   
   showPopup(false);
 }
+
+document.querySelectorAll('.remove').forEach(btn => {
+  btn.addEventListener('click', function(event){
+    console.warn('Delete warning: ', event.target.offsetParent.id);
+    const findID = event.target.offsetParent.id
+    const findUID = findID.slice(7)
+    console.warn('Delete warning: ', findUID);
+    const index = myLibrary.findIndex(obj => obj['uid'] === findUID);
+    console.warn('index: ', index);
+    // remove from myLibrary
+    myLibrary.splice(index, 1);
+    console.log(myLibrary);
+    document.getElementById(`card-${findUID}`).remove();
+    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+    // init(myLibrary);
+  })
+});
+
