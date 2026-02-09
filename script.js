@@ -5,32 +5,34 @@
 // adding thumbnail image link to localStorage so that API isn't called unnecessarily (DONE)
 // creating a buffer icon while it is finding and displaying the thumbnail (DONE)
 // all components are dynamically updated showcasing number of books logged, common reasons, etc (DONE)
-// adding delete card option
+// adding delete card option (done) + delete confirmation modal (done)
+// attach event listener to delete button when card is added (done)
 // prevent from adding duplicate
 // adding filter functionality
 // adding progress bar below each card (stuck to card) to elevate UI
 // error handling
+// Mobile S and M responsive mode alignment fixes for .left pane 
 // adding light/dark mode (optional)
 
 const showPopup = (status) => {
-    const modalId = 'dynamic-popup';
-    let existingModal = document.getElementById(modalId);
+  const modalId = 'dynamic-popup';
+  let existingModal = document.getElementById(modalId);
 
-    if (status) {
-        // 1. Remove existing to prevent duplicates
-        if (existingModal){
-          existingModal.remove();
-        }
+  if (status) {
+    // 1. Remove existing to prevent duplicates
+    if (existingModal) {
+      existingModal.remove();
+    }
 
-        // 2. Define the Template (Now with custom CSS for the overlay)
-        const content = `
+    // 2. Define the Template (Now with custom CSS for the overlay)
+    const content = `
             <div style="text-align: center; padding: 20px;">
                 <div class="custom-spinner"></div>
                 <h5 style="margin-top: 15px; font-family: sans-serif;">Adding Book...</h5>
             </div>
             `;
 
-        const modalHtml = `
+    const modalHtml = `
             <div id="${modalId}" style="
                 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
                 background: rgba(0,0,0,0.5); display: flex; align-items: center;
@@ -40,24 +42,24 @@ const showPopup = (status) => {
                 </div>
             </div>`;
 
-        // 3. Inject into the body
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    // 3. Inject into the body
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-    } else {
-        // 4. Update to 'Success' state then hide
-        if (existingModal) {
-            const contentArea = existingModal.querySelector('.loader-content');
-            contentArea.innerHTML = `
+  } else {
+    // 4. Update to 'Success' state then hide
+    if (existingModal) {
+      const contentArea = existingModal.querySelector('.loader-content');
+      contentArea.innerHTML = `
                 <div style="text-align: center; padding: 20px; color: #28a745;">
                     <div style="font-size: 40px; margin-bottom: 10px;">✓</div>
                     <h5>Done!</h5>
                 </div>`;
 
-            setTimeout(() => {
-                existingModal.remove();
-            }, 1500);
-        }
+      setTimeout(() => {
+        existingModal.remove();
+      }, 1000);
     }
+  }
 };
 
 // localStorage.removeItem('myLibrary');
@@ -80,6 +82,24 @@ function init(library) {
   author.value = 'Paulo Coelho'
   totalPages.value = '200';
   pagesRead.value = '100';
+
+  // title.value = 'The Stranger'
+  // author.value = 'Albert Camus'
+  // totalPages.value = '200';
+  // pagesRead.value = '100';
+  // reason.value = 'Writing style';
+
+  // title.value = 'How to Win Friends and Influence People'
+  // author.value = 'Dale Carnegie'
+  // totalPages.value = '200';
+  // pagesRead.value = '100';
+  // reason.value = 'Boring plot';
+
+  // title.value = 'The Hunger Games'
+  // author.value = 'Suzanne Collins'
+  // totalPages.value = '200';
+  // pagesRead.value = '100';
+  // reason.value = 'Too long';
 }
 
 async function addBook() {
@@ -90,48 +110,44 @@ async function addBook() {
   }
   else {
     const imageURL = await imageURLExtraction(title.value, author.value);
-    console.log("imageURL: ", imageURL);
+    // console.log("imageURL: ", imageURL);
     var uid = crypto.randomUUID();
     const book = new Book(title.value, author.value, totalPages.value, pagesRead.value, reason.value, imageURL, uid);
   }
 
 }
 
-function countLoggedBooks(){
+function countLoggedBooks() {
   // creating array of reasons logged
   reasonArray = myLibrary.map(item => item.reason);
-  console.log("reasonArray: ", reasonArray);
-  
-  if(reasonArray.length > 0){
-    const groupByReason = {"Slow pacing": 0, "Writing style": 0, "Boring plot": 0, "Too long": 0}; // initializing empty object
-  // going through each reason
-  for(const reason of reasonArray){
-    if(groupByReason[reason]){
-      groupByReason[reason]++; // incrementing count if reason already exists in groupByReason object
-    }
-    else{
-      groupByReason[reason] = 1; // changing count to 1 if reason not found in groupByReason object
+  // console.log("reasonArray: ", reasonArray);
+  const groupByReason = { "Slow pacing": 0, "Writing style": 0, "Boring plot": 0, "Too long": 0 }; // initializing empty object
+  const idReasonMap = { "slow-pacing": "Slow pacing", "writing-style": "Writing style", "boring-plot": "Boring plot", "too-long": "Too long" };
+  if (reasonArray.length > 0) {
+    // going through each reason
+    for (const reason of reasonArray) {
+      if (groupByReason[reason]) {
+        groupByReason[reason]++; // incrementing count if reason already exists in groupByReason object
+      }
+      else {
+        groupByReason[reason] = 1; // changing count to 1 if reason not found in groupByReason object
+      }
     }
   }
-  console.log("groupByReason: ", groupByReason);
-  document.getElementById('total-books').textContent = myLibrary.length;
-  document.getElementById('total-slow-pacing').textContent = groupByReason["Slow pacing"] + " (" + Math.round((groupByReason["Slow pacing"]/myLibrary.length)*100) + "%)";
-  document.getElementById('progress-slow-pacing').value = Math.round((groupByReason["Slow pacing"]/myLibrary.length)*100);
-  document.getElementById('total-writing-style').textContent = groupByReason["Writing style"] + " (" + Math.round((groupByReason["Writing style"]/myLibrary.length)*100) + "%)";
-  // console.log("progress-writing-style: ", groupByReason["Writing style"], myLibrary.length);
-  document.getElementById('progress-writing-style').value = Math.round((groupByReason["Writing style"]/myLibrary.length)*100);
-  document.getElementById('total-boring-plot').textContent = groupByReason["Boring plot"] + " (" + Math.round((groupByReason["Boring plot"]/myLibrary.length)*100) + "%)";
-  document.getElementById('progress-boring-plot').value = Math.round((groupByReason["Boring plot"]/myLibrary.length)*100);
-  document.getElementById('total-too-long').textContent = groupByReason["Too long"] + " (" + Math.round((groupByReason["Too long"]/myLibrary.length)*100) + "%)";
-  document.getElementById('progress-too-long').value = Math.round((groupByReason["Too long"]/myLibrary.length)*100);
-  }
-  else{
+  else {
     //
   }
+
+  document.getElementById('total-books').textContent = myLibrary.length;
+
+  for(const id in idReasonMap){
+    document.getElementById(`total-${id}`).textContent = groupByReason[idReasonMap[id]] + " (" + (Number.isNaN(groupByReason[idReasonMap[id]] / myLibrary.length) ? 0 : Math.round((groupByReason[idReasonMap[id]] / myLibrary.length) * 100)) + "%)";
+  document.getElementById(`progress-${id}`).value = Number.isNaN(groupByReason[idReasonMap[id]] / myLibrary.length) ? 0 : Math.round((groupByReason[idReasonMap[id]] / myLibrary.length) * 100);
+  };
 }
 
 async function imageURLExtraction(title, author) {
-  console.log("API used");
+  // console.log("API used");
   var searchTitle = title.split(' ').join('+');
   var searchAuthor = author.split(' ').join('+');
   const query = `${searchTitle}+inauthor:${searchAuthor}`;
@@ -156,25 +172,6 @@ async function imageURLExtraction(title, author) {
     console.error('Error fetching data:', error);
     return null;
   }
-
-  // fetch(url)
-  //   .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(data => {
-  //     if (!data.items) {
-  //       console.log('No books found');
-  //       return;
-  //     }
-  //     const imageURL = data.items[2].volumeInfo.imageLinks.thumbnail;
-  //     console.log("imageURL: ", imageURL);
-  //     // const imageURL = `https://cors-anywhere.herokuapp.com/books.google.com/books/publisher/content/images/frontcover/${bookImgId}?fife=w400-h600&source=gbs_api`;
-  //     fetchAndDisplayImage(imageURL, `thumbnail-${title}`);
-  //   })
-  //   .catch(error => console.error('Error fetching data:', error));
 }
 
 function Book(title, author, totalPages, pagesRead, reason, imageURL, uid) {
@@ -246,14 +243,14 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL, uid)
   bookAuthor.className = 'author';
   bookAuthor.textContent = author;
 
-  const percentRead = document.createElement('span');
-  percentRead.className = 'percent';
-  percentRead.textContent = Math.round((pagesRead / totalPages) * 100) + "%" + " COMPLETED";
+  const percentReadText = document.createElement('span');
+  percentReadText.className = 'percent-text';
+  percentReadText.textContent = Math.round((pagesRead / totalPages) * 100) + "%" + " COMPLETED";
 
   bookDetails.appendChild(bookTitle);
   bookDetails.appendChild(bookAuthor);
   bookSummary.appendChild(bookDetails)
-  bookSummary.appendChild(percentRead);
+  bookSummary.appendChild(percentReadText);
 
   const dnfReason = document.createElement('span');
   dnfReason.className = 'dnf-reason';
@@ -267,30 +264,50 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL, uid)
   deleteIcon.className = 'fa solid fa-trash';
   removeBtn.appendChild(deleteIcon);
 
+  const percentReadProgBar = document.createElement('progress');
+  percentReadProgBar.value = Math.round((pagesRead / totalPages) * 100);
+  percentReadProgBar.max = '100';
+
   card.appendChild(img);
   card.appendChild(bookSummary);
   card.appendChild(dnfReason);
   card.appendChild(removeBtn);
-
   booksGrid.appendChild(card);
-  
+  // booksGrid.appendChild(percentReadProgBar);
+
   showPopup(false);
 }
 
-document.querySelectorAll('.remove').forEach(btn => {
-  btn.addEventListener('click', function(event){
-    console.warn('Delete warning: ', event.target.offsetParent.id);
-    const findID = event.target.offsetParent.id
-    const findUID = findID.slice(7)
-    console.warn('Delete warning: ', findUID);
+const deleteModal = document.getElementById('delete-container');
+var findID = '';
+document.getElementById('books-grid').addEventListener('click', function(event){
+  const deleteBtn = event.target.closest('.remove');
+  if (deleteBtn) {
+    findID = event.target.offsetParent.id;
+    // console.log("findID: ", findID);
+    deleteModal.showModal();
+  }
+});
+  
+
+deleteModal.addEventListener('close', function () {
+  if (deleteModal.returnValue == 'confirm') {
+    // console.warn("Delete confirmed");
+    const findUID = findID.slice(7);
+    // console.log("findUID:", findUID);
     const index = myLibrary.findIndex(obj => obj['uid'] === findUID);
-    console.warn('index: ', index);
-    // remove from myLibrary
-    myLibrary.splice(index, 1);
-    console.log(myLibrary);
+    // console.log('index: ', index);
+    // remove card and book info from myLibrary
     document.getElementById(`card-${findUID}`).remove();
-    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-    // init(myLibrary);
-  })
+    myLibrary.splice(index, 1);
+    console.log("library: ", myLibrary);
+    // localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+    // update all components
+    countLoggedBooks();
+  }
+  else {
+    return;
+  }
 });
 
+// document.createElement('dialog');

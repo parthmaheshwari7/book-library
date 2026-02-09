@@ -27,8 +27,8 @@
         <div class="left-pane">
             <div class="label"><i class="fa-solid fa-list-ul"></i>&nbsp&nbspOVERVIEW</div>
             <div id="totalDNF">
-                    <span class="label" style="font-size: 15px;">Total DNFs</span>
-                    <span class="label" id="total-books" style="font-size: 18px;color: #B22222; font-weight: 700;">0</span>   
+                <span class="label" style="font-size: 15px;">Total DNFs</span>
+                <span class="label" id="total-books" style="font-size: 18px;color: #B22222; font-weight: 700;">0</span>
             </div>
             <div class="label" style="padding-top: 10px;"><i class="fa-solid fa-chart-simple"></i>&nbsp&nbspCOMMON
                 REASONS</div>
@@ -116,9 +116,19 @@
             </div>
             <hr>
             <div id="books-grid"></div>
+            <dialog id="delete-container">
+                <h3><i class="fa solid fa-trash"></i>&nbspRemove Book</h3>
+                <h4>Are you sure you want to remove this book from your library?</h4>
+                <form method="dialog">
+                    <div class="dialog-btn">
+                        <button value="cancel" id="dialog-cancel">Cancel</button>
+                    <button value="confirm" id="dialog-confirm">Delete</button>
+                    </div>
+                    
+                </form>
+            </dialog>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 
