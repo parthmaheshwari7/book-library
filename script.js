@@ -9,7 +9,8 @@
 // attach event listener to delete button when card is added (done)
 // prevent from adding duplicate
 // adding filter functionality (done)
-// adding progress bar below each card (stuck to card) to elevate UI
+// adding progress bar below each card (stuck to card) to elevate UI (done)
+// add colours to tags (done)
 // error handling
 // Mobile S and M responsive mode alignment fixes for .left pane 
 // adding light/dark mode (optional)
@@ -62,9 +63,7 @@ const showPopup = (status) => {
   }
 };
 
-// localStorage.removeItem('myLibrary');
 let myLibrary = JSON.parse(localStorage.getItem('myLibrary')) || [];
-// myLibrary.pop();
 const title = document.getElementById('title');
 const author = document.getElementById('author');
 const totalPages = document.getElementById('total-pages');
@@ -93,11 +92,11 @@ function init(library) {
   // pagesRead.value = '100';
   // reason.value = 'Writing style';
 
-  // title.value = 'How to Win Friends and Influence People'
-  // author.value = 'Dale Carnegie'
-  // totalPages.value = '200';
-  // pagesRead.value = '100';
-  // reason.value = 'Boring plot';
+  title.value = 'How to Win Friends and Influence People'
+  author.value = 'Dale Carnegie'
+  totalPages.value = '200';
+  pagesRead.value = '100';
+  reason.value = 'Boring plot';
 
   // title.value = 'The Hunger Games'
   // author.value = 'Suzanne Collins'
@@ -107,15 +106,21 @@ function init(library) {
 }
 
 async function addBook() {
-  showPopup(true);
-  // take params, create a book then store it in the array
+  // for (i = 0; i < myLibrary.length; i++) {
+  //   if ((title.value == myLibrary[i].title || author.value == myLibrary[i].author)) {
+  //     alert("duplicate");
+  //     break;
+  //   }
+  // }
   if (!title.value || !author.value) {
     alert("not allowed");
   }
   else {
+    showPopup(true);
     const imageURL = await imageURLExtraction(title.value, author.value);
     // console.log("imageURL: ", imageURL);
     var uid = crypto.randomUUID();
+    // take params, create a book then store it in the array
     const book = new Book(title.value, author.value, totalPages.value, pagesRead.value, reason.value, imageURL, uid);
   }
 
@@ -246,13 +251,13 @@ filterDropdown.onchange = function () {
   // for (i = 0; i < filteredLibrary.length; i++) {
   //   createCard(filteredLibrary[i].title, filteredLibrary[i].author, filteredLibrary[i].totalPages, filteredLibrary[i].pagesRead, filteredLibrary[i].reason, filteredLibrary[i].imageURL, filteredLibrary[i].uid);
   // }
-  if(this.value == "None"){
+  if (this.value == "None") {
     countLoggedBooks(originalLibrary);
   }
-  else{
+  else {
     countLoggedBooks(filteredLibrary);
   }
-  
+
   // createCard(title, author, Number(totalPages), Number(pagesRead), reason, imageURL, uid);
 
   // filteredLibrary = myLibrary.map(item => item.reason);
@@ -273,6 +278,12 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL, uid)
   card.id = `card-${uid}`;
   card.className = 'card';
 
+  const cardTop = document.createElement('div');
+  cardTop.className = 'card-top';
+
+  const cardBottom = document.createElement('div');
+  cardBottom.className = 'card-bottom';
+
   const img = document.createElement('img');
   img.id = `thumbnail-${title}`;
   if (imageURL) {
@@ -288,7 +299,7 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL, uid)
 
   const bookSummary = document.createElement('div');
   bookSummary.className = 'book-summary';
-  bookSummary.style.flex = '1 1 50%';
+  bookSummary.style.flex = '1 1 20%';
 
   const bookDetails = document.createElement('div');
   bookDetails.className = 'book-details';
@@ -323,13 +334,43 @@ function createCard(title, author, totalPages, pagesRead, reason, imageURL, uid)
   removeBtn.appendChild(deleteIcon);
 
   const percentReadProgBar = document.createElement('progress');
+  percentReadProgBar.className = 'percent-pg-bar';
   percentReadProgBar.value = Math.round((pagesRead / totalPages) * 100);
   percentReadProgBar.max = '100';
+  // percentReadProgBar.style.height = '8px';
+  // percentReadProgBar.style.display = 'block';
 
-  card.appendChild(img);
-  card.appendChild(bookSummary);
-  card.appendChild(dnfReason);
-  card.appendChild(removeBtn);
+  switch (reason) {
+    case "Slow pacing":
+      dnfReason.style.color = '#B22222';
+      dnfReason.style.backgroundColor = 'rgba(178, 34, 34, 0.111)';
+      percentReadProgBar.style.accentColor = '#B22222';
+      break;
+    case "Writing style":
+      dnfReason.style.color = '#0000ff';
+      dnfReason.style.backgroundColor = 'rgba(0, 0, 255, 0.15)';
+      percentReadProgBar.style.accentColor = '#0000ff';
+      break;
+    case "Boring plot":
+      dnfReason.style.color = '#008080';
+      dnfReason.style.backgroundColor = 'rgba(0, 128, 128, 0.111)';
+      percentReadProgBar.style.accentColor = '#008080';
+      break;
+    case "Too long":
+      dnfReason.style.color = '#800080';
+      dnfReason.style.backgroundColor = 'rgba(128, 0, 128, 0.111)';
+      percentReadProgBar.style.accentColor = '#800080';
+      break;
+  }
+
+  cardTop.appendChild(img);
+  cardTop.appendChild(bookSummary);
+  cardTop.appendChild(dnfReason);
+  cardTop.appendChild(removeBtn);
+  cardBottom.appendChild(percentReadProgBar);
+  // card.appendChild(lineBreak);
+  card.appendChild(cardTop);
+  card.appendChild(cardBottom);
   booksGrid.appendChild(card);
   // booksGrid.appendChild(percentReadProgBar);
 
