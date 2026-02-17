@@ -1,18 +1,4 @@
-//list of features
-// create card automatically after adding book (DONE)
-// when page refreshes then use myLibrary array to run a loop and render everything (DONE)
-// adding thumbnail image from google books api (DONE)
-// adding thumbnail image link to localStorage so that API isn't called unnecessarily (DONE)
-// creating a buffer icon while it is finding and displaying the thumbnail (DONE)
-// all components are dynamically updated showcasing number of books logged, common reasons, etc (DONE)
-// adding delete card option (done) + delete confirmation modal (done)
-// attach event listener to delete button when card is added (done)
-// adding filter functionality (done)
-// adding progress bar below each card (stuck to card) to elevate UI (done)
-// add colours to tags (done)
-// prevent from adding duplicate (done)
-// error handling (done)
-// Mobile S and M responsive mode alignment fixes for .left pane
+// list of features
 // adding light/dark mode (optional)
 
 const showPopup = (status) => {
@@ -403,5 +389,3 @@ deleteModal.addEventListener('close', function () {
     return;
   }
 });
-
-// document.createElement('dialog');
