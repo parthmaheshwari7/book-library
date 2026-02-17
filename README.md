@@ -1,4 +1,4 @@
-# DNF (Did Not Finish) Book Library 📚
+# DNF Book Library 📚
 ## This project is not:
 * A Goodreads clone
 * A reading tracker
