@@ -36,6 +36,7 @@ button.github {
 button.dark-light:hover,
 button.github:hover, button.remove:hover {
     transform: scale(1.2);
+    cursor: pointer;
 }
 
 .main {
@@ -159,6 +160,7 @@ button.remove:hover{
 
 button#add:hover {
     transform: scale(1.02);
+    cursor: pointer;
 }
 
 .top {
