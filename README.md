@@ -11,11 +11,14 @@
 * Log unfinished books with reason.
 * See patterns in what doesn't work for you.
 * No backend (for now)
-  * Persistent local storage: books added will be stored locally only.
+  * Books added will be stored locally only.
 * Automatic book cover image extraction.
 
 ## Technologies 💥
 * HTML
 * CSS - Grid/Flexbox
 * JavaScript
+  * API's used
+    * Google Books: extraction of book cover
+    * Persistent Local Storage: to store book details as a key-value pair in a device's browser
 * Git
