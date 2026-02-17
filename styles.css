@@ -228,13 +228,7 @@ hr {
 }
 
 .card-bottom{
-    height: 17px;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-    /* line-height: 0;
-    font-size: 0;
-    overflow: hidden; */
+    height: 16px;
 }
 
 span {
