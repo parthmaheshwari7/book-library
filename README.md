@@ -1,4 +1,5 @@
-# DNF Book Library 📚 : https://parthmaheshwari7.github.io/book-library/
+# DNF Book Library 📚
+https://parthmaheshwari7.github.io/book-library/
 
 ## This project is not:
 * A Goodreads clone
@@ -21,5 +22,5 @@
 * JavaScript
   * API's used
     * Google Books: extraction of book cover
-    * Persistent Local Storage: to store book details as a key-value pair in a device's browser
+    * Persistent Local Storage
 * Git
